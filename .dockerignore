@@ -1,0 +1,38 @@
+# Never ship the host's install — it's platform-specific and would be
+# copied into the build context on every build.
+node_modules
+dist
+dist-ssr
+build
+
+# Caches
+.vite
+.tanstack
+.nitro
+.vinxi
+.wrangler
+.output
+*.tsbuildinfo
+
+# VCS / tooling
+.git
+.gitignore
+.github
+.vscode
+.claude
+.mcp.json
+.cta.json
+
+# Docker itself
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Docs and local config
+README.md
+CLAUDE.md
+.env
+.env.*
+!.env.example
+*.log
+.DS_Store
