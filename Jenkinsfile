@@ -6,7 +6,7 @@ pipeline {
         DOCKER_IMAGE     = 'theghost007/static-reactjs-demo'
         DOCKER_TAG       = "${BUILD_NUMBER}"
         CONTAINER_NAME   = 'static-react-app-container'
-        HOST_PORT        = '3000'  
+        HOST_PORT        = '7000'  
         CONTAINER_PORT   = '80'   
     }
 
@@ -80,10 +80,52 @@ pipeline {
             }
         }
 
-        stage('Add domain') {
+        stage('Add Domain') {
             steps {
                 sh '''
                     echo "Adding domain to the container..."
+
+                    sudo tee /etc/nginx/sites-available/static-react-app > /dev/null <<'EOF'
+server {
+    listen 80;
+    server_name vmmi.duckdns.org;
+
+    location / {
+        proxy_pass http://localhost:7000;
+
+        # Preserve original host and client info
+        proxy_set_header Host $host;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+
+        # Required for Jenkins (fix reverse proxy issues)
+        proxy_set_header X-Forwarded-Port $server_port;
+
+        # Disable buffering (important for console logs / streaming)
+        proxy_buffering off;
+
+        # Increase timeout for long builds
+        proxy_read_timeout 3600;
+        proxy_send_timeout 3600;
+
+        # WebSocket support (VERY IMPORTANT)
+        proxy_http_version 1.1;
+        proxy_set_header Upgrade $http_upgrade;
+        proxy_set_header Connection "upgrade";
+
+        # Prevent caching issues
+        proxy_cache_bypass $http_upgrade;
+    }
+}
+EOF
+
+                    sudo ln -sf /etc/nginx/sites-available/static-react-app /etc/nginx/sites-enabled/static-react-app
+                    sudo nginx -t
+                    sudo systemctl reload nginx
+
+                    echo "Nginx configuration completed."
+
                 '''
 
             }
