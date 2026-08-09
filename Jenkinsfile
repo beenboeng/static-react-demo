@@ -23,6 +23,7 @@ pipeline {
         stage('Test') {
             steps {
                 sh '''
+                    echo "Testing..."
                     bun install --frozen-lockfile
                     bun test
                 '''
