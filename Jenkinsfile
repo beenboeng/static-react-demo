@@ -8,6 +8,8 @@ pipeline {
         CONTAINER_NAME   = 'static-react-app-container'
         HOST_PORT        = '7000'  
         CONTAINER_PORT   = '80'   
+        DOMAIN = 'vmmi.duckdns.org'
+        EMAIL  = 'you@example.com'
     }
 
     triggers {
@@ -134,7 +136,8 @@ EOF
         stage('Add SSL') {
             steps {
                 sh '''
-                    echo "Adding SSL to the container..."
+                    echo "Adding SSL via certbot..."
+                    sudo certbot --nginx -d ${DOMAIN} --non-interactive --agree-tos -m ${EMAIL} --redirect
                 '''
             }
         }
