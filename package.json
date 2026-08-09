@@ -10,6 +10,7 @@
     "generate-routes": "tsr generate",
     "build": "vite build",
     "preview": "vite preview"
+    
   },
   "dependencies": {
     "@heroui/react": "^3.2.3",

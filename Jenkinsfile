@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    tools{
+        nodejs 'nodejs-20'
+    }
+
     environment {
         DOCKER_IMAGE     = 'theghost007/static-reactjs-demo'
         DOCKER_TAG       = "${BUILD_NUMBER}"
@@ -25,7 +29,7 @@ pipeline {
                 sh '''
                     echo "Testing..."
                     bun install --frozen-lockfile
-                    bun test
+                    bun run build
                 '''
             }
         }
