@@ -79,5 +79,21 @@ pipeline {
                 '''
             }
         }
+
+        stage('Add domain') {
+            steps {
+                sh '''
+                    echo "Adding domain to the container..."
+                '''
+
+        }
+
+        stage('Add SSL') {
+            steps {
+                sh '''
+                    echo "Adding SSL to the container..."
+                '''
+            }
+        }
     }
 }
