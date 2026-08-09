@@ -86,6 +86,7 @@ pipeline {
                     echo "Adding domain to the container..."
                 '''
 
+            }
         }
 
         stage('Add SSL') {
