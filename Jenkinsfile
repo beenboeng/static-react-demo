@@ -9,6 +9,10 @@ pipeline {
         CONTAINER_PORT   = '80'   
     }
 
+    triggers {
+        githubPush()
+    }
+
     stages {
         stage('Checkout') {
             steps {
