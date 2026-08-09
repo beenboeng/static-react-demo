@@ -28,8 +28,8 @@ pipeline {
             steps {
                 sh '''
                     echo "Testing..."
-                    bun install --frozen-lockfile
-                    bun run build
+                    npm install
+                    npm run build
                 '''
             }
         }
