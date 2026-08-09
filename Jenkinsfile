@@ -136,8 +136,12 @@ EOF
         stage('Add SSL') {
             steps {
                 sh '''
-                    echo "Adding SSL via certbot..."
-                    sudo certbot --nginx -d ${DOMAIN} --non-interactive --agree-tos -m ${EMAIL} --redirect
+                    echo "Adding SSL via Certbot..."
+                    if ! sudo certbot certificates 2>/dev/null | grep -q "${DOMAIN}"; then
+                        sudo certbot --nginx -d ${DOMAIN} --non-interactive --agree-tos -m ${EMAIL} --redirect
+                    else
+                        echo "Cert already exists, skipping."
+                    fi
                 '''
             }
         }
